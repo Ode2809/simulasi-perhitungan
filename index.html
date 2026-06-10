@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulasi Notaris Mobile</title>
+
+<style>
+body{
+    font-family:Arial,sans-serif;
+    background:#f3f4f6;
+    margin:0;
+    padding:15px;
+}
+.container{
+    max-width:1000px;
+    margin:auto;
+}
+.header{
+    background:#0f9d58;
+    color:#fff;
+    padding:20px;
+    border-radius:12px;
+}
+.section,.card{
+    background:#fff;
+    border-radius:12px;
+    padding:15px;
+    margin-top:15px;
+}
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:10px;
+}
+label{
+    font-size:13px;
+    display:block;
+    margin-bottom:5px;
+}
+input{
+    width:100%;
+    padding:10px;
+    border:1px solid #ccc;
+    border-radius:6px;
+    box-sizing:border-box;
+    font-size:16px;
+}
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:12px;
+    margin-top:15px;
+}
+.value{
+    font-size:28px;
+    font-weight:bold;
+}
+.green{color:#0f9d58}
+.blue{color:#2563eb}
+.birumuda{color:#27E0F5}
+.red{color:#dc2626}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+td{
+    border:1px solid #ddd;
+    padding:8px;
+}
+.highlight{
+    background:#d9f0f6;
+    font-weight:bold;
+}
+.total-row{
+    background:#fff6d6;
+    font-weight:bold;
+}
+.grand{
+    background:#dceee4;
+    text-align:center;
+    padding:20px;
+    border-radius:12px;
+    margin-top:15px;
+}
+.grand .amount{
+    font-size:36px;
+    font-weight:bold;
+    color:#0f9d58;
+}
+button{
+    padding:10px 15px;
+    border:none;
+    border-radius:6px;
+    color:#fff;
+    cursor:pointer;
+}
+.print{
+    background:#2563eb;
+}
+.reset{
+    background:#6b7280;
+}
+@media(max-width:600px){
+    .value{
+        font-size:22px;
+    }
+    .grand .amount{
+        font-size:28px;
+    }
+}
+
+select{
+    width:100%;
+    padding:10px;
+    border:1px solid #ccc;
+    border-radius:6px;
+    box-sizing:border-box;
+    font-size:16px;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h2>Simulasi Biaya Notaris & Balik Nama SHM</h2>
+        <small>Versi Mobile Dengan Perhitungan Otomatis</small>
+    </div>
+
+    <div class="section">
+
+        <div class="grid">
+
+            <div>
+                <label>Jumlah Bidang</label>
+                <input type="number" id="jumlahBidang" value="1">
+            </div>
+            <div>
+                <label>Jumlah Pecah Surat</label>
+                <select id="jumlahPecah">
+                    <option value="1">1 Kali</option>
+                    <option value="2">2 Kali</option>
+                    <option value="3">3 Kali</option>
+                </select>
+            </div>
+            <div>
+                <label>Luas Tanah (m²)</label>
+                <input type="number" id="luasTanah" value="101">
+            </div>
+
+            <div>
+                <label>Luas Bangunan (m²)</label>
+                <input type="number" id="luasBangunan" value="70">
+            </div>
+
+            <div>
+                <label>Harga Jual Rumah</label>
+                <input type="text" id="hargaJual" value="Rp 270.000.000" inputmode="numeric">
+            </div>
+
+            <div>
+                <label>Biaya Tambahan</label>
+                <input type="text" id="biayaTambahan" value="Rp 0" inputmode="numeric">
+            </div>
+
+        </div>
+
+        <br>
+
+        <button class="print" onclick="window.print()">Print</button>
+        <button class="reset" onclick="resetForm()">Reset</button>
+
+    </div>
+
+    <div class="cards">
+
+        <div class="card">
+            <div id="labelPecah">BIAYA PECAH SURAT</div>
+            <div id="biayaPecah" class="value green">Rp 0</div>
+        </div>
+
+        <div class="card">
+            <div>BIAYA AJB</div>
+            <div id="biayaAjb" class="value blue">Rp 0</div>
+        </div>
+
+        <div class="card">
+            <div>BIAYA SHM</div>
+            <div id="biayaSHM" class="value birumuda">Rp 0</div>
+        </div>
+
+        <div class="card">
+            <div>TOTAL PAJAK</div>
+            <div id="totalPajakCard" class="value red">Rp 0</div>
+        </div>
+
+    </div>
+
+    <div class="section">
+
+        <h3>Detail Perhitungan</h3>
+
+        <table>
+            <tr>
+                <td>Jumlah Bidang</td>
+                <td id="dBidang"></td>
+            </tr>
+            <tr>
+                <td>Jumlah Pecah Surat</td>
+                <td id="dPecahSurat"></td>
+            </tr>
+
+            <tr>
+                <td>NJOP Tanah</td>
+                <td id="dNjopTanah"></td>
+            </tr>
+
+            <tr>
+                <td>NJOP Bangunan</td>
+                <td id="dNjopBangunan"></td>
+            </tr>
+
+            <tr class="highlight">
+                <td>Total NJOP</td>
+                <td id="dTotalNjop"></td>
+            </tr>
+
+            <tr>
+                <td>PPh Penjual (2.5%)</td>
+                <td id="dPph"></td>
+            </tr>
+
+            <tr>
+                <td>BPHTB Pembeli (5%)</td>
+                <td id="dBphtb"></td>
+            </tr>
+
+            <tr class="total-row">
+                <td>Total Pajak</td>
+                <td id="dTotalPajak"></td>
+            </tr>
+        </table>
+
+        <div class="grand">
+            <h2>GRAND TOTAL</h2>
+            <div id="grandTotal" class="amount">Rp 0</div>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+window.onerror = function(msg, url, lineNo){
+    console.log(msg);
+    return false;
+};
+
+function rupiah(n){
+    return 'Rp ' + Math.round(n).toLocaleString('id-ID');
+}
+
+function getNumber(value){
+    if(!value) return 0;
+    var clean = String(value).replace(/[^0-9]/g, '');
+    return Number(clean) || 0;
+}
+
+function formatRupiahInput(value){
+    var angka = String(value).replace(/[^0-9]/g, '');
+    if(!angka || angka === '0'){
+        return 'Rp 0';
+    }
+    return 'Rp ' + Number(angka).toLocaleString('id-ID');
+}
+
+function hitung(){
+    var jumlahBidang = parseFloat(document.getElementById('jumlahBidang').value) || 0;
+    var pecahSurat = parseFloat(document.getElementById('jumlahPecah').value) || 0;
+    var luasTanah = parseFloat(document.getElementById('luasTanah').value) || 0;
+    var luasBangunan = parseFloat(document.getElementById('luasBangunan').value) || 0;
+    var hargaJual = getNumber(document.getElementById('hargaJual').value);
+    var biayaTambahan = getNumber(document.getElementById('biayaTambahan').value);
+
+    var njopTanahPerM2 = 1416000;
+    var njopBangunanPerM2 = 1516000;
+    var njopTanah = luasTanah * njopTanahPerM2;
+    var njopBangunan = luasBangunan * njopBangunanPerM2;
+    var totalNjop = njopTanah + njopBangunan;
+    var pph = hargaJual * 0.025;
+    var npoptkp = 80000000;
+    var npop = Math.max(hargaJual, totalNjop);
+    var dppBphtb = Math.max(0, npop - npoptkp);
+    var bphtb = dppBphtb * 0.05;
+    var totalPajak = pph + bphtb;
+    var biayaAjb = 10150000;
+    var biayaSHM = 7500000;
+    var biayaPecah = pecahSurat * 7500000;
+    var grandTotal = biayaAjb + biayaSHM + biayaPecah + totalPajak + biayaTambahan;
+
+    document.getElementById('dBidang').textContent = jumlahBidang;
+    document.getElementById('labelPecah').textContent ='Biaya Pecah Surat (' + pecahSurat + ' Kali)';
+    document.getElementById('biayaPecah').textContent = rupiah(biayaPecah);
+    document.getElementById('biayaAjb').textContent = rupiah(biayaAjb);
+    document.getElementById('biayaSHM').textContent = rupiah(biayaSHM);
+    document.getElementById('totalPajakCard').textContent = rupiah(totalPajak);
+    document.getElementById('dPecahSurat').textContent = pecahSurat;
+    document.getElementById('dNjopTanah').textContent = rupiah(njopTanah);
+    document.getElementById('dNjopBangunan').textContent = rupiah(njopBangunan);
+    document.getElementById('dTotalNjop').textContent = rupiah(totalNjop);
+    document.getElementById('dPph').textContent = rupiah(pph);
+    document.getElementById('dBphtb').textContent = rupiah(bphtb);
+    document.getElementById('dTotalPajak').textContent = rupiah(totalPajak);
+    document.getElementById('grandTotal').textContent = rupiah(grandTotal);
+}
+
+function resetForm(){
+    document.getElementById('jumlahBidang').value = 1;
+    document.getElementById('jumlahPecah').value = 1;
+    document.getElementById('luasTanah').value = 101;
+    document.getElementById('luasBangunan').value = 70;
+    document.getElementById('hargaJual').value = 'Rp 270.000.000';
+    document.getElementById('biayaTambahan').value = 'Rp 0';
+
+    hitung();
+}
+
+// Menggunakan 'blur' atau 'input' dengan penanganan posisi kursor iOS yang lebih stabil
+document.getElementById('hargaJual').addEventListener('input', function(){
+    var angka = this.value.replace(/[^0-9]/g, '');
+    if(angka) {
+        this.value = 'Rp ' + Number(angka).toLocaleString('id-ID');
+    } else {
+        this.value = 'Rp 0';
+    }
+    hitung();
+});
+
+document.getElementById('biayaTambahan').addEventListener('input', function(){
+    var angka = this.value.replace(/[^0-9]/g, '');
+    if(angka) {
+        this.value = 'Rp ' + Number(angka).toLocaleString('id-ID');
+    } else {
+        this.value = 'Rp 0';
+    }
+    hitung();
+});
+
+document.getElementById('jumlahBidang').addEventListener('input', hitung);
+document.getElementById('jumlahPecah').addEventListener('change', hitung);
+document.getElementById('luasTanah').addEventListener('input', hitung);
+document.getElementById('luasBangunan').addEventListener('input', hitung);
+
+// Memastikan fungsi hitung berjalan di iOS Safari saat load awal
+window.onload = function() {
+    hitung();
+};
+</script>
+
+</body>
+</html>
