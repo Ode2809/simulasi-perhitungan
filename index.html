@@ -178,18 +178,13 @@ select{
     <div class="cards">
 
         <div class="card">
-            <div id="labelPecah">BIAYA PECAH SURAT</div>
+            <div id="labelPecah">BIAYA PECAH SURAT (BPN)</div>
             <div id="biayaPecah" class="value green">Rp 0</div>
         </div>
 
         <div class="card">
-            <div>BIAYA AJB</div>
+            <div>BIAYA JASA NOTARIS</div>
             <div id="biayaAjb" class="value blue">Rp 0</div>
-        </div>
-
-        <div class="card">
-            <div>BIAYA SHM</div>
-            <div id="biayaSHM" class="value birumuda">Rp 0</div>
         </div>
 
         <div class="card">
@@ -298,9 +293,9 @@ function hitung(){
     var bphtb = dppBphtb * 0.05;
     var totalPajak = pph + bphtb;
     var biayaAjb = 10150000;
-    var biayaSHM = 7500000;
+    //var biayaSHM = 7500000;
     var biayaPecah = pecahSurat * 7500000;
-    var grandTotal = biayaAjb + biayaSHM + biayaPecah + totalPajak + biayaTambahan;
+    var grandTotal = biayaAjb + biayaPecah + totalPajak + biayaTambahan;
 
     document.getElementById('dBidang').textContent = jumlahBidang;
     document.getElementById('labelPecah').textContent ='Biaya Pecah Surat (' + pecahSurat + ' Kali)';
