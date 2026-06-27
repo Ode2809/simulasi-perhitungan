@@ -181,10 +181,7 @@ select{
             <div id="labelPecah">BIAYA PECAH SURAT (BPN)</div>
             <div id="biayaPecah" class="value green">Rp 0</div>
         </div>
-<div class="card">
-            <div>BIAYA SHM</div>
-            <div id="biayaSHM" class="value birumuda">Rp 0</div>
-</div>
+        
         <div class="card">
             <div>BIAYA JASA NOTARIS</div>
             <div id="biayaAjb" class="value blue">Rp 0</div>
@@ -296,7 +293,7 @@ function hitung(){
     var bphtb = dppBphtb * 0.05;
     var totalPajak = pph + bphtb;
     var biayaAjb = 10150000;
-    var biayaSHM = 7500000;
+    //var biayaSHM = 7500000;
     var biayaPecah = pecahSurat * 7500000;
     var grandTotal = biayaAjb + biayaSHM + biayaPecah + totalPajak + biayaTambahan;
 
@@ -304,7 +301,7 @@ function hitung(){
     document.getElementById('labelPecah').textContent ='Biaya Pecah Surat (' + pecahSurat + ' Kali)';
     document.getElementById('biayaPecah').textContent = rupiah(biayaPecah);
     document.getElementById('biayaAjb').textContent = rupiah(biayaAjb);
-    document.getElementById('biayaSHM').textContent = rupiah(biayaSHM);
+    //document.getElementById('biayaSHM').textContent = rupiah(biayaSHM);
     document.getElementById('totalPajakCard').textContent = rupiah(totalPajak);
     document.getElementById('dPecahSurat').textContent = pecahSurat;
     document.getElementById('dNjopTanah').textContent = rupiah(njopTanah);
