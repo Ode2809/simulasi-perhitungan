@@ -6,118 +6,110 @@
 <title>Simulasi Notaris Mobile</title>
 
 <style>
-body{
-    font-family:Arial,sans-serif;
-    background:#f3f4f6;
-    margin:0;
-    padding:15px;
+body {
+    font-family: Arial, sans-serif;
+    background: #f3f4f6;
+    margin: 0;
+    padding: 15px;
 }
-.container{
-    max-width:1000px;
-    margin:auto;
+.container {
+    max-width: 800px;
+    margin: auto;
 }
-.header{
-    background:#0f9d58;
-    color:#fff;
-    padding:20px;
-    border-radius:12px;
+.header {
+    background: #0f9d58;
+    color: #fff;
+    padding: 20px;
+    border-radius: 12px;
 }
-.section,.card{
-    background:#fff;
-    border-radius:12px;
-    padding:15px;
-    margin-top:15px;
+.section, .card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 15px;
+    margin-top: 15px;
 }
-.grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-    gap:10px;
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
 }
-label{
-    font-size:13px;
-    display:block;
-    margin-bottom:5px;
+label {
+    font-size: 13px;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
 }
-input{
-    width:100%;
-    padding:10px;
-    border:1px solid #ccc;
-    border-radius:6px;
-    box-sizing:border-box;
-    font-size:16px;
+input, select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 15px;
 }
-.cards{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:12px;
-    margin-top:15px;
+button {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
 }
-.value{
-    font-size:28px;
-    font-weight:bold;
-}
-.green{color:#0f9d58}
-.blue{color:#2563eb}
-.birumuda{color:#27E0F5}
-.red{color:#dc2626}
+.print { background: #2563eb; }
+.reset { background: #6b7280; }
 
-table{
-    width:100%;
-    border-collapse:collapse;
+/* Tampilan Rincian Seperti di Gambar */
+.preview-card {
+    background: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
 }
-td{
-    border:1px solid #ddd;
-    padding:8px;
+.title-rincian {
+    font-size: 20px;
+    font-weight: bold;
+    color: #1f2937;
+    margin-bottom: 15px;
+    line-height: 1.3;
 }
-.highlight{
-    background:#d9f0f6;
-    font-weight:bold;
+.table-rincian {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
 }
-.total-row{
-    background:#fff6d6;
-    font-weight:bold;
+.table-rincian th {
+    background-color: #2b5797;
+    color: white;
+    text-align: left;
+    padding: 10px 15px;
+    font-size: 15px;
 }
-.grand{
-    background:#dceee4;
-    text-align:center;
-    padding:20px;
-    border-radius:12px;
-    margin-top:15px;
+.table-rincian td {
+    padding: 10px 15px;
+    border: 1px solid #e5e7eb;
+    font-size: 14px;
+    color: #374151;
 }
-.grand .amount{
-    font-size:36px;
-    font-weight:bold;
-    color:#0f9d58;
+.table-rincian tr.total-row td {
+    background-color: #d6e9c6;
+    font-weight: bold;
+    color: #1b5e20;
 }
-button{
-    padding:10px 15px;
-    border:none;
-    border-radius:6px;
-    color:#fff;
-    cursor:pointer;
+.info-pendukung {
+    font-size: 14px;
+    color: #374151;
+    margin-bottom: 15px;
 }
-.print{
-    background:#2563eb;
+.info-pendukung ul {
+    margin: 5px 0 0 20px;
+    padding: 0;
 }
-.reset{
-    background:#6b7280;
-}
-@media(max-width:600px){
-    .value{
-        font-size:22px;
-    }
-    .grand .amount{
-        font-size:28px;
-    }
-}
-
-select{
-    width:100%;
-    padding:10px;
-    border:1px solid #ccc;
-    border-radius:6px;
-    box-sizing:border-box;
-    font-size:16px;
+.catatan {
+    font-size: 13px;
+    color: #4b5563;
+    font-style: italic;
 }
 </style>
 </head>
@@ -127,17 +119,46 @@ select{
 
     <div class="header">
         <h2>Simulasi Biaya Notaris & Balik Nama SHM</h2>
-        <small>Versi Mobile Dengan Perhitungan Otomatis</small>
+        <small>Versi Mobile Dengan Perhitungan Otomatis (Wilayah Depok)</small>
     </div>
 
+    <!-- Form Input -->
     <div class="section">
-
         <div class="grid">
+            <div>
+                <label>Nama Pemilik Rumah</label>
+                <select id="namaPemilik" onchange="updatePemilik()">
+                    <option value="Pak Dio - Blok A1">Pak Dio - Blok A1</option>
+                    <option value="Pak Tomy - Blok A2">Pak Tomy - Blok A2</option>
+                    <option value="Ibu Sely - Blok A3">Ibu Sely - Blok A3</option>
+                    <option value="Pak Gara - Blok A4">Pak Gara - Blok A4</option>
+                    <option value="Pak Mukmin - Blok A5">Pak Mukmin - Blok A5</option>
+                    <option value="Pak Jana - Blok A6">Pak Jana - Blok A6</option>
+                    <option value="Pak Zaki - Blok B2">Pak Zaki - Blok B2</option>
+                    <option value="Pak Dede - Blok B3">Pak Dede - Blok B3</option>
+                    <option value="Pak Aji - Blok B4">Pak Aji - Blok B4</option>
+                    <option value="Pak Ticko - Blok B5">Pak Ticko - Blok B5</option>
+                    <option value="Pak Alan - Blok B6">Pak Alan - Blok B6</option>
+                    <option value="Pak Farhan - Blok C4">Pak Farhan - Blok C4</option>
+                    <option value="Pak Agus - Blok D1">Pak Agus - Blok D1</option>
+                    <option value="Pak Imam - Blok D2-3">Pak Imam - Blok D2-3</option>
+                    <option value="Bu Jana - Blok D4-5">Bu Jana - Blok D4-5</option>
+                    <option value="Pak Ode - Blok D6">Pak Ode - Blok D6</option>
+                    <option value="Bu Asti - Blok E3">Bu Asti - Blok E3</option>
+                    <option value="Pak Sofyan - Blok E5">Pak Sofyan - Blok E5</option>
+                    <option value="Pak Baihakki - Blok E1-2">Pak Baihakki - Blok E1-2</option>
+                    <option value="Pak Budi - Blok D13">Pak Budi - Blok D13</option>
+                    <option value="Pak Fathur - Blok D14">Pak Fathur - Blok D14</option>
+                    <option value="Bu Mei - Blok D10">Bu Mei - Blok D10</option>
+                    <option value="Pak Satino - Blok D11">Pak Satino - Blok D11</option>
+                </select>
+            </div>
 
             <div>
                 <label>Jumlah Bidang</label>
                 <input type="number" id="jumlahBidang" value="1">
             </div>
+
             <div>
                 <label>Jumlah Pecah Surat</label>
                 <select id="jumlahPecah">
@@ -146,116 +167,148 @@ select{
                     <option value="3">3 Kali</option>
                 </select>
             </div>
+
+            <div>
+                <label>Kekurangan Biaya</label>
+                <select id="kekurangan">
+                    <option value="20000000">Ada (Rp 20.000.000)</option>
+                    <option value="0">Tidak Ada (Rp 0)</option>
+                </select>
+            </div>
+
             <div>
                 <label>Luas Tanah (m²)</label>
-                <input type="number" id="luasTanah" value="101">
+                <input type="number" id="luasTanah" value="0">
             </div>
 
             <div>
                 <label>Luas Bangunan (m²)</label>
-                <input type="number" id="luasBangunan" value="70">
+                <input type="number" id="luasBangunan" value="0">
             </div>
 
             <div>
-                <label>Harga Jual Rumah</label>
-                <input type="text" id="hargaJual" value="Rp 270.000.000" inputmode="numeric">
+                <label>NJOP Tanah per m²</label>
+                <input type="text" id="njopTanahPerM2Input" value="Rp 3.100.000" inputmode="numeric">
             </div>
 
             <div>
-                <label>Biaya Tambahan</label>
-                <input type="text" id="biayaTambahan" value="Rp 0" inputmode="numeric">
+                <label>NJOP Bangunan per m²</label>
+                <input type="text" id="njopBangunanPerM2Input" value="Rp 1.516.000" inputmode="numeric">
             </div>
 
+            <div>
+                <label>NJOP Total (Dapat Diubah)</label>
+                <input type="text" id="njopTotalInput" value="Rp 0" inputmode="numeric">
+            </div>
+
+            <div>
+                <label>Harga Jual Rumah / Harga Beli</label>
+                <input type="text" id="hargaJual" value="Rp 0" inputmode="numeric">
+            </div>
+
+            <div>
+                <label>Biaya Iuran Surat</label>
+                <input type="text" id="biayaIuran" value="Rp 15.214.000" inputmode="numeric">
+            </div>
+
+            <div>
+                <label>Biaya Pecah Sertifikat (per x)</label>
+                <input type="text" id="biayaPecah" value="Rp 6.000.000" inputmode="numeric">
+            </div>
+
+            <div>
+                <label>Biaya Notaris</label>
+                <input type="text" id="biayaNotaris" value="Rp 4.000.000" inputmode="numeric">
+            </div>
+
+            <div>
+                <label>Biaya Pecah PBB</label>
+                <input type="text" id="biayaPecahPbb" value="Rp 500.000" inputmode="numeric">
+            </div>
+
+            <div>
+                <label>Biaya PNBP</label>
+                <input type="text" id="biayaPnbp" value="Rp 500.000" inputmode="numeric">
+            </div>
         </div>
 
         <br>
-
         <button class="print" onclick="window.print()">Print</button>
         <button class="reset" onclick="resetForm()">Reset</button>
-
     </div>
 
-    <div class="cards">
-
-        <div class="card">
-            <div id="labelPecah">BIAYA PECAH SURAT (BPN)</div>
-            <div id="biayaPecah" class="value green">Rp 0</div>
-        </div>
+    <!-- Tampilan Rincian (Detail Perhitungan) -->
+    <div class="preview-card">
+        <div class="title-rincian" id="titlePemilik">Rincian Kewajiban Pembayaran<br>Pak Dio - Blok A1 (0/0)</div>
         
-        <div class="card">
-            <div>BIAYA JASA NOTARIS</div>
-            <div id="biayaAjb" class="value blue">Rp 0</div>
-        </div>
-
-        <div class="card">
-            <div>TOTAL PAJAK</div>
-            <div id="totalPajakCard" class="value red">Rp 0</div>
-        </div>
-
-    </div>
-
-    <div class="section">
-
-        <h3>Detail Perhitungan</h3>
-
-        <table>
-            <tr>
-                <td>Jumlah Bidang</td>
-                <td id="dBidang"></td>
-            </tr>
-            <tr>
-                <td>Jumlah Pecah Surat</td>
-                <td id="dPecahSurat"></td>
-            </tr>
-
-            <tr>
-                <td>NJOP Tanah</td>
-                <td id="dNjopTanah"></td>
-            </tr>
-
-            <tr>
-                <td>NJOP Bangunan</td>
-                <td id="dNjopBangunan"></td>
-            </tr>
-
-            <tr class="highlight">
-                <td>Total NJOP</td>
-                <td id="dTotalNjop"></td>
-            </tr>
-
-            <tr>
-                <td>PPh Penjual (2.5%)</td>
-                <td id="dPph"></td>
-            </tr>
-
-            <tr>
-                <td>BPHTB Pembeli (5%)</td>
-                <td id="dBphtb"></td>
-            </tr>
-
-            <tr class="total-row">
-                <td>Total Pajak</td>
-                <td id="dTotalPajak"></td>
-            </tr>
+        <table class="table-rincian">
+            <thead>
+                <tr>
+                    <th>Uraian</th>
+                    <th>Nominal</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Sisa pembayaran</td>
+                    <td id="rSisaPembayaran">Rp0</td>
+                </tr>
+                <tr>
+                    <td>Penambahan pembayaran</td>
+                    <td id="rPenambahanPembayaran">Rp0</td>
+                </tr>
+                <tr>
+                    <td>Biaya pecah sertifikat</td>
+                    <td id="rBiayaPecah">Rp0</td>
+                </tr>
+                <tr>
+                    <td>Biaya notaris</td>
+                    <td id="rBiayaNotaris">Rp0</td>
+                </tr>
+                <tr>
+                    <td>Biaya pecah PBB</td>
+                    <td id="rBiayaPbb">Rp0</td>
+                </tr>
+                <tr>
+                    <td>Biaya PNBP</td>
+                    <td id="rBiayaPnbp">Rp0</td>
+                </tr>
+                <tr>
+                    <td>Pajak penjual (estimasi)</td>
+                    <td id="rPph">Rp0</td>
+                </tr>
+                <tr>
+                    <td>Pajak pembeli (estimasi)</td>
+                    <td id="rBphtb">Rp0</td>
+                </tr>
+                <tr class="total-row">
+                    <td>TOTAL ESTIMASI</td>
+                    <td id="rTotalEstimasi">Rp0</td>
+                </tr>
+            </tbody>
         </table>
 
-        <div class="grand">
-            <h2>GRAND TOTAL</h2>
-            <div id="grandTotal" class="amount">Rp 0</div>
+        <div class="info-pendukung">
+            <strong>Informasi Pendukung:</strong>
+            <ul>
+                <li>NJOP: <span id="rNjop">Rp0</span></li>
+                <li>Harga beli: <span id="rHargaBeli">± Rp0</span></li>
+            </ul>
         </div>
 
+        <div class="catatan">
+            Catatan: Seluruh biaya merupakan estimasi dan dapat berubah sesuai perhitungan akhir notaris, BPN, dan pajak.
+        </div>
     </div>
 
 </div>
 
 <script>
-window.onerror = function(msg, url, lineNo){
-    console.log(msg);
-    return false;
-};
+var isManualNjop = false;
+var isManualHargaJual = false;
 
 function rupiah(n){
-    return 'Rp ' + Math.round(n).toLocaleString('id-ID');
+    return 'Rp' + Math.round(n).toLocaleString('id-ID');
 }
 
 function getNumber(value){
@@ -264,94 +317,166 @@ function getNumber(value){
     return Number(clean) || 0;
 }
 
-function formatRupiahInput(value){
-    var angka = String(value).replace(/[^0-9]/g, '');
-    if(!angka || angka === '0'){
-        return 'Rp 0';
+function formatCurrencyInput(inputElement){
+    var angka = inputElement.value.replace(/[^0-9]/g, '');
+    if(angka) {
+        inputElement.value = 'Rp ' + Number(angka).toLocaleString('id-ID');
+    } else {
+        inputElement.value = 'Rp 0';
     }
-    return 'Rp ' + Number(angka).toLocaleString('id-ID');
+}
+
+// Pembulatan ke kelipatan 50 Juta Terdekat (ke atas)
+function bulatkanKePembulatanSpesifik(val) {
+    if (val <= 0) return 0;
+    return Math.ceil(val / 50000000) * 50000000;
+}
+
+function updatePemilik() {
+    hitung();
 }
 
 function hitung(){
-    var jumlahBidang = parseFloat(document.getElementById('jumlahBidang').value) || 0;
-    var pecahSurat = parseFloat(document.getElementById('jumlahPecah').value) || 0;
+    var nama = document.getElementById('namaPemilik').value;
     var luasTanah = parseFloat(document.getElementById('luasTanah').value) || 0;
     var luasBangunan = parseFloat(document.getElementById('luasBangunan').value) || 0;
-    var hargaJual = getNumber(document.getElementById('hargaJual').value);
-    var biayaTambahan = getNumber(document.getElementById('biayaTambahan').value);
+    
+    // Update Judul dengan Luas Bangunan / Luas Tanah
+    document.getElementById('titlePemilik').innerHTML = 'Rincian Kewajiban Pembayaran<br>' + nama + ' (' + luasBangunan + '/' + luasTanah + ')';
 
-    //var njopTanahPerM2 = 1416000;
-    var njopTanahPerM2 = 3100000;
-    var njopBangunanPerM2 = 1516000;
-    var njopTanah = luasTanah * njopTanahPerM2;
-    var njopBangunan = luasBangunan * njopBangunanPerM2;
-    var totalNjop = njopTanah + njopBangunan;
-    var pph = hargaJual * 0.025;
-    var npoptkp = 80000000;
-    var npop = Math.max(hargaJual, totalNjop);
-    var dppBphtb = Math.max(0, npop - npoptkp);
-    var bphtb = dppBphtb * 0.05;
-    var totalPajak = pph + bphtb;
-    var biayaAjb = 10150000;
-    //var biayaSHM = 7500000;
-    var biayaPecah = pecahSurat * 7500000;
-    var grandTotal = biayaAjb + biayaPecah + totalPajak + biayaTambahan;
+    var pecahSurat = parseFloat(document.getElementById('jumlahPecah').value) || 0;
+    var sisaPembayaran = parseFloat(document.getElementById('kekurangan').value) || 0;
+    var biayaIuran = getNumber(document.getElementById('biayaIuran').value);
+    
+    var unitBiayaPecah = getNumber(document.getElementById('biayaPecah').value);
+    var totalBiayaPecah = unitBiayaPecah * pecahSurat;
 
-    document.getElementById('dBidang').textContent = jumlahBidang;
-    document.getElementById('labelPecah').textContent ='Biaya Pecah Surat (BPN) (' + pecahSurat + ' Kali)';
-    //document.getElementById('labelPecah').textContent = 'BIAYA PECAH SURAT (BPN) ' + pecahSurat + 'x';
-    document.getElementById('biayaPecah').textContent = rupiah(biayaPecah);
-    document.getElementById('biayaAjb').textContent = rupiah(biayaAjb);
-    //document.getElementById('biayaSHM').textContent = rupiah(biayaSHM);
-    document.getElementById('totalPajakCard').textContent = rupiah(totalPajak);
-    document.getElementById('dPecahSurat').textContent = pecahSurat;
-    document.getElementById('dNjopTanah').textContent = rupiah(njopTanah);
-    document.getElementById('dNjopBangunan').textContent = rupiah(njopBangunan);
-    document.getElementById('dTotalNjop').textContent = rupiah(totalNjop);
-    document.getElementById('dPph').textContent = rupiah(pph);
-    document.getElementById('dBphtb').textContent = rupiah(bphtb);
-    document.getElementById('dTotalPajak').textContent = rupiah(totalPajak);
-    document.getElementById('grandTotal').textContent = rupiah(grandTotal);
+    var biayaNotaris = getNumber(document.getElementById('biayaNotaris').value);
+    var biayaPbb = getNumber(document.getElementById('biayaPecahPbb').value);
+    var biayaPnbp = getNumber(document.getElementById('biayaPnbp').value);
+
+    // Ambil Nilai NJOP per m2 dari Form Input
+    var njopTanahPerM2 = getNumber(document.getElementById('njopTanahPerM2Input').value);
+    var njopBangunanPerM2 = getNumber(document.getElementById('njopBangunanPerM2Input').value);
+
+    // Hitung NJOP Total
+    var totalNjop = 0;
+    if (!isManualNjop) {
+        totalNjop = (luasTanah * njopTanahPerM2) + (luasBangunan * njopBangunanPerM2);
+        document.getElementById('njopTotalInput').value = 'Rp ' + Number(totalNjop).toLocaleString('id-ID');
+    } else {
+        totalNjop = getNumber(document.getElementById('njopTotalInput').value);
+    }
+
+    // Pembulatan NJOP ke kelipatan 50jt atas
+    var hargaJualHitung = bulatkanKePembulatanSpesifik(totalNjop);
+
+    if (!isManualHargaJual) {
+        document.getElementById('hargaJual').value = 'Rp ' + Number(hargaJualHitung).toLocaleString('id-ID');
+    } else {
+        hargaJualHitung = getNumber(document.getElementById('hargaJual').value);
+    }
+
+    // Perhitungan Pajak
+    var pph = hargaJualHitung * 0.025; // 2.5%
+    var npoptkpDepok = 60000000;
+    var npop = Math.max(hargaJualHitung, totalNjop);
+    var dppBphtb = Math.max(0, npop - npoptkpDepok);
+    var bphtb = dppBphtb * 0.05; // 5%
+
+    // Grand Total Estimasi
+    var totalEstimasi = sisaPembayaran + biayaIuran + totalBiayaPecah + biayaNotaris + biayaPbb + biayaPnbp + pph + bphtb;
+
+    // Output ke tabel rincian
+    document.getElementById('rSisaPembayaran').textContent = rupiah(sisaPembayaran);
+    document.getElementById('rPenambahanPembayaran').textContent = rupiah(biayaIuran);
+    document.getElementById('rBiayaPecah').textContent = rupiah(totalBiayaPecah);
+    document.getElementById('rBiayaNotaris').textContent = rupiah(biayaNotaris);
+    document.getElementById('rBiayaPbb').textContent = rupiah(biayaPbb);
+    document.getElementById('rBiayaPnbp').textContent = rupiah(biayaPnbp);
+    document.getElementById('rPph').textContent = rupiah(pph);
+    document.getElementById('rBphtb').textContent = rupiah(bphtb);
+    document.getElementById('rTotalEstimasi').textContent = rupiah(totalEstimasi);
+
+    // Informasi Pendukung
+    document.getElementById('rNjop').textContent = rupiah(totalNjop);
+    document.getElementById('rHargaBeli').textContent = '± ' + rupiah(hargaJualHitung);
 }
 
 function resetForm(){
+    isManualNjop = false;
+    isManualHargaJual = false;
+
+    document.getElementById('namaPemilik').selectedIndex = 0;
     document.getElementById('jumlahBidang').value = 1;
     document.getElementById('jumlahPecah').value = 1;
-    document.getElementById('luasTanah').value = 101;
-    document.getElementById('luasBangunan').value = 70;
-    document.getElementById('hargaJual').value = 'Rp 270.000.000';
-    document.getElementById('biayaTambahan').value = 'Rp 0';
+    document.getElementById('kekurangan').value = 20000000;
+    document.getElementById('luasTanah').value = 0;
+    document.getElementById('njopTanahPerM2Input').value = 'Rp 3.100.000';
+    document.getElementById('luasBangunan').value = 0;
+    document.getElementById('njopBangunanPerM2Input').value = 'Rp 1.516.000';
+    document.getElementById('njopTotalInput').value = 'Rp 0';
+    document.getElementById('hargaJual').value = 'Rp 0';
+    document.getElementById('biayaIuran').value = 'Rp 15.214.000';
+    document.getElementById('biayaPecah').value = 'Rp 6.000.000';
+    document.getElementById('biayaNotaris').value = 'Rp 4.000.000';
+    document.getElementById('biayaPecahPbb').value = 'Rp 500.000';
+    document.getElementById('biayaPnbp').value = 'Rp 500.000';
 
     hitung();
 }
 
-// Menggunakan 'blur' atau 'input' dengan penanganan posisi kursor iOS yang lebih stabil
-document.getElementById('hargaJual').addEventListener('input', function(){
-    var angka = this.value.replace(/[^0-9]/g, '');
-    if(angka) {
-        this.value = 'Rp ' + Number(angka).toLocaleString('id-ID');
-    } else {
-        this.value = 'Rp 0';
-    }
+// Handler input NJOP per m2
+document.getElementById('njopTanahPerM2Input').addEventListener('input', function(){
+    isManualNjop = false;
+    isManualHargaJual = false;
+    formatCurrencyInput(this);
     hitung();
 });
 
-document.getElementById('biayaTambahan').addEventListener('input', function(){
-    var angka = this.value.replace(/[^0-9]/g, '');
-    if(angka) {
-        this.value = 'Rp ' + Number(angka).toLocaleString('id-ID');
-    } else {
-        this.value = 'Rp 0';
-    }
+document.getElementById('njopBangunanPerM2Input').addEventListener('input', function(){
+    isManualNjop = false;
+    isManualHargaJual = false;
+    formatCurrencyInput(this);
     hitung();
+});
+
+// Handler input manual NJOP Total & Harga Jual
+document.getElementById('njopTotalInput').addEventListener('input', function(){
+    isManualNjop = true;
+    formatCurrencyInput(this);
+    hitung();
+});
+
+document.getElementById('hargaJual').addEventListener('input', function(){
+    isManualHargaJual = true;
+    formatCurrencyInput(this);
+    hitung();
+});
+
+// Event Listeners currency inputs
+var currencyInputs = ['biayaIuran', 'biayaPecah', 'biayaNotaris', 'biayaPecahPbb', 'biayaPnbp'];
+currencyInputs.forEach(function(id) {
+    document.getElementById(id).addEventListener('input', function(){
+        formatCurrencyInput(this);
+        hitung();
+    });
 });
 
 document.getElementById('jumlahBidang').addEventListener('input', hitung);
 document.getElementById('jumlahPecah').addEventListener('change', hitung);
-document.getElementById('luasTanah').addEventListener('input', hitung);
-document.getElementById('luasBangunan').addEventListener('input', hitung);
+document.getElementById('kekurangan').addEventListener('change', hitung);
+document.getElementById('luasTanah').addEventListener('input', function(){
+    isManualNjop = false;
+    isManualHargaJual = false;
+    hitung();
+});
+document.getElementById('luasBangunan').addEventListener('input', function(){
+    isManualNjop = false;
+    isManualHargaJual = false;
+    hitung();
+});
 
-// Memastikan fungsi hitung berjalan di iOS Safari saat load awal
 window.onload = function() {
     hitung();
 };
