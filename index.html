@@ -156,7 +156,7 @@ button {
 
             <div>
                 <label>Jumlah Bidang</label>
-                <input type="number" id="jumlahBidang" value="1" >
+                <input type="number" id="jumlahBidang" value="1">
             </div>
 
             <div>
@@ -212,11 +212,6 @@ button {
             </div>
 
             <div>
-                <label>Biaya Pecah Sertifikat (per x)</label>
-                <input type="text" id="biayaPecah" value="Rp 6.000.000" inputmode="numeric">
-            </div>
-
-            <div>
                 <label>Biaya Notaris</label>
                 <input type="text" id="biayaNotaris" value="Rp 4.000.000" inputmode="numeric">
             </div>
@@ -258,7 +253,7 @@ button {
                     <td id="rPenambahanPembayaran">Rp0</td>
                 </tr>
                 <tr>
-                    <td>Biaya pecah sertifikat</td>
+                    <td id="tdLabelPecah">Biaya pecah sertifikat</td>
                     <td id="rBiayaPecah">Rp0</td>
                 </tr>
                 <tr>
@@ -307,6 +302,9 @@ button {
 var isManualNjop = false;
 var isManualHargaJual = false;
 
+// Tarif dasar pecah sertifikat per kali
+var TARIF_PECAH_PER_X = 6000000;
+
 function rupiah(n){
     return 'Rp' + Math.round(n).toLocaleString('id-ID');
 }
@@ -342,14 +340,15 @@ function hitung(){
     var luasBangunan = parseFloat(document.getElementById('luasBangunan').value) || 0;
     
     // Update Judul dengan Luas Bangunan / Luas Tanah
-    document.getElementById('titlePemilik').innerHTML = 'Rincian Kewajiban Pembayaran<br>' + nama + ' (' + luasBangunan + '/' + luasTanah + ')';
+    document.getElementById('titlePemilik').innerHTML = 'Rincian Kewajiban Pembayaran<br>' + nama + ' (' + luasTanah + '/' + luasBangunan + ')';
 
-    var pecahSurat = parseFloat(document.getElementById('jumlahPecah').value) || 0;
+    var pecahSurat = parseFloat(document.getElementById('jumlahPecah').value) || 1;
     var sisaPembayaran = parseFloat(document.getElementById('kekurangan').value) || 0;
     var biayaIuran = getNumber(document.getElementById('biayaIuran').value);
     
-    var unitBiayaPecah = getNumber(document.getElementById('biayaPecah').value);
-    var totalBiayaPecah = unitBiayaPecah * pecahSurat;
+    // Update Label dan perhitungan otomatis biaya pecah sertifikat
+    document.getElementById('tdLabelPecah').textContent = 'Biaya pecah sertifikat (' + pecahSurat + 'x)';
+    var totalBiayaPecah = TARIF_PECAH_PER_X * pecahSurat;
 
     var biayaNotaris = getNumber(document.getElementById('biayaNotaris').value);
     var biayaPbb = getNumber(document.getElementById('biayaPecahPbb').value);
@@ -418,7 +417,6 @@ function resetForm(){
     document.getElementById('njopTotalInput').value = 'Rp 0';
     document.getElementById('hargaJual').value = 'Rp 0';
     document.getElementById('biayaIuran').value = 'Rp 0';
-    document.getElementById('biayaPecah').value = 'Rp 6.000.000';
     document.getElementById('biayaNotaris').value = 'Rp 4.000.000';
     document.getElementById('biayaPecahPbb').value = 'Rp 500.000';
     document.getElementById('biayaPnbp').value = 'Rp 500.000';
@@ -455,7 +453,7 @@ document.getElementById('hargaJual').addEventListener('input', function(){
 });
 
 // Event Listeners currency inputs
-var currencyInputs = ['biayaIuran', 'biayaPecah', 'biayaNotaris', 'biayaPecahPbb', 'biayaPnbp'];
+var currencyInputs = ['biayaIuran', 'biayaNotaris', 'biayaPecahPbb', 'biayaPnbp'];
 currencyInputs.forEach(function(id) {
     document.getElementById(id).addEventListener('input', function(){
         formatCurrencyInput(this);
