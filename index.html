@@ -69,7 +69,7 @@ button {
 .btn-toggle-edit { background: #f59e0b; }
 .btn-toggle-edit.active { background: #10b981; }
 
-/* Tampilan Rincian Seperti di Gambar */
+/* Tampilan Rincian */
 .preview-card {
     background: #fff;
     padding: 25px;
@@ -107,6 +107,13 @@ button {
     font-weight: bold;
     color: #1b5e20;
 }
+.table-rincian tr.grand-row td {
+    background-color: #0f9d58;
+    font-weight: bold;
+    color: #ffffff;
+    font-size: 15px;
+}
+
 .info-pendukung {
     font-size: 14px;
     color: #374151;
@@ -165,10 +172,6 @@ button {
     color: #0369a1;
     line-height: 1.5;
 }
-.catatan-khusus ul {
-    margin: 5px 0 0 15px;
-    padding: 0;
-}
 
 .catatan {
     font-size: 13px;
@@ -183,7 +186,7 @@ button {
 
     <div class="header">
         <h2>Simulasi Biaya Notaris & Balik Nama SHM</h2>
-        <small>Versi Mobile Dengan Perhitungan Otomatis (Wilayah Depok)</small> 
+        <small>Versi Mobile Dengan Perhitungan Otomatis (Wilayah Depok)</small>
     </div>
 
     <!-- Form Input -->
@@ -300,11 +303,10 @@ button {
         <button class="reset" onclick="resetForm()">Reset</button>
     </div>
 
-    <!-- Tampilan Rincian (Detail Perhitungan) -->
+    <!-- Tampilan Rincian (Detail Perhitungan Per Warga) -->
     <div class="preview-card">
         <div class="title-rincian" id="titlePemilik">Rincian Kewajiban Pembayaran<br>Pak Dio - Blok A1 (0/0)</div>
         
-        <!-- DIV NOTIFIKASI PEMBAYARAN FEB 2027, SISA, & KETERANGAN TANAH -->
         <div class="notif-box">
             <div class="notif-title">📌 Status Pembayaran Akhir PEBRUARI 2027</div>
             <div class="notif-grid">
@@ -360,6 +362,14 @@ button {
                     <td>TOTAL ESTIMASI (Total Bayar Tiap Warga)</td>
                     <td id="rTotalEstimasi">Rp0</td>
                 </tr>
+                <tr>
+                    <td><em>Estimasi Biaya Tambahan Legalitas (Notaris, Pecah, PBB, PNBP, BPHTB, PPh)</em></td>
+                    <td id="rTotalBiayaLain">Rp0</td>
+                </tr>
+                <tr class="grand-row">
+                    <td>TOTAL KESELURAHAN SAMPAI SHM (Total Estimasi + Biaya Legalitas/Pajak)</td>
+                    <td id="rGrandTotalSHM">Rp0</td>
+                </tr>
             </tbody>
         </table>
 
@@ -388,8 +398,6 @@ const databaseWarga = [
     { nama: "Pak Mukmin - Blok A5", tanah: 60, bangunan: 40, kb: 20000000, iuran: 15214091, feb2027: "Rp21.969.322", sisa: "Rp13.244.768", ket: "SHM Ahmat Hamit" },
     { nama: "Pak Jana - Blok A6", tanah: 60, bangunan: 40, kb: 20000000, iuran: 15214091, feb2027: "Rp21.969.322", sisa: "Rp13.244.768", ket: "SHM Ahmat Hamit" },
     { nama: "Pak Zaki - Blok B2", tanah: 60, bangunan: 40, kb: 20000000, iuran: 18864327, feb2027: "Rp24.246.627", sisa: "Rp14.617.700", ket: "SHM Ramah Ramin" },
-    
-    // Pak Alan: Detail Persentase & Rincian Proporsi
     { 
         nama: "Pak Alan - Blok B6", 
         tanah: 39, 
@@ -400,7 +408,7 @@ const databaseWarga = [
         sisa: "Rp8.613.404", 
         ket: "SHM Ramah Ramin", 
         infoKhusus: `
-            <b>Khusus Pak Alan:</b> Kurang bayar disesuaikan Rp12.000.000 dikarenakan perbedaan status berkas/surat.<br><br>
+            <b>Khusus Pak Alan:</b> Kurang bayar disesuaikan Rp12.000.000 dikarenakan perbedaan status berkas/surat (Potongan Rp8.000.000).<br><br>
             <b>Persentase Pembagian Pak Alan:</b><br>
             - SHM: 39/60 = 65%<br>
             - Girik: 21/60 = 35%<br><br>
@@ -410,7 +418,6 @@ const databaseWarga = [
             <i>Jadi kira-kira: Bangunan pada SHM 26 m² (65%) & Bangunan pada Girik 14 m² (35%).</i>
         ` 
     },
-    
     { nama: "Pak Imam - Blok D2-3", tanah: 101, bangunan: 72, kb: 20000000, iuran: 28682668, feb2027: "Rp30.372.081", sisa: "Rp18.310.586", ket: "SHM Rikyh" },
     { nama: "Bu Jana - Blok D4-5", tanah: 101, bangunan: 72, kb: 20000000, iuran: 28682668, feb2027: "Rp30.372.081", sisa: "Rp18.310.586", ket: "SHM Rikyh" },
     { nama: "Pak Ode - Blok D6", tanah: 60, bangunan: 40, kb: 20000000, iuran: 17039209, feb2027: "Rp23.107.975", sisa: "Rp13.931.234", ket: "SHM Rikyh" },
@@ -420,8 +427,6 @@ const databaseWarga = [
     { nama: "Pak Dede - Blok B3", tanah: 60, bangunan: 104, kb: 0, iuran: 18864327, feb2027: "Rp11.769.052", sisa: "Rp7.095.274", ket: "SHM Ramah Ramin" },
     { nama: "Pak Aji - Blok B4", tanah: 47.5, bangunan: 40, kb: 0, iuran: 15314491, feb2027: "Rp9.554.386", sisa: "Rp5.760.106", ket: "SHM Ramah Ramin" },
     { nama: "Pak Ticko - Blok B5", tanah: 40, bangunan: 40, kb: 0, iuran: 13184590, feb2027: "Rp8.225.586", sisa: "Rp4.959.005", ket: "SHM Ramah Ramin" },
-    
-    // Pak Farhan: Detail Persentase & Rincian Proporsi
     { 
         nama: "Pak Farhan - Blok C4", 
         tanah: 10, 
@@ -445,7 +450,6 @@ const databaseWarga = [
             <i>Jadi kira-kira: SHM ± 6,7 m² bangunan (16,67%) & Girik ± 33,3 m² bangunan (83,33%).</i>
         ` 
     },
-    
     { nama: "Pak Agus - Blok D1", tanah: 48, bangunan: 36, kb: 0, iuran: 13631367, feb2027: "Rp8.504.320", sisa: "Rp5.127.047", ket: "SHM Rikyh" },
     { nama: "Bu Asti - Blok E3", tanah: 49, bangunan: 36, kb: 0, iuran: 13915354, feb2027: "Rp8.681.493", sisa: "Rp5.233.860", ket: "SHM Rikyh" },
     { nama: "Pak Budi - Blok D13", tanah: 71, bangunan: 40, kb: 0, iuran: 21988181, feb2027: "Rp13.717.959", sisa: "Rp8.270.223", ket: "SHM Ramah Ramin" },
@@ -520,7 +524,6 @@ function loadDataWarga() {
     document.getElementById('nSisa').textContent = data.sisa;
     document.getElementById('nKetTanah').textContent = data.ket;
 
-    // Menampilkan Informasi Khusus Persentase Pak Alan & Pak Farhan
     const container = document.getElementById('infoKhususContainer');
     if (data.infoKhusus) {
         container.innerHTML = `<div class="catatan-khusus">${data.infoKhusus}</div>`;
@@ -578,8 +581,14 @@ function hitung(){
     var dppBphtb = Math.max(0, npop - npoptkpDepok);
     var bphtb = dppBphtb * 0.05;
 
-    // Total Bayar Tiap Warga = Kurang Bayar + iuran surat
+    // Total Estimasi (KB + Iuran)
     var totalEstimasi = sisaPembayaran + biayaIuran;
+
+    // Total Biaya Legalitas & Pajak (Pecah + Notaris + PBB + PNBP + PPh + BPHTB)
+    var totalBiayaLain = totalBiayaPecah + biayaNotaris + biayaPbb + biayaPnbp + pph + bphtb;
+
+    // Grand Total Sampai SHM
+    var grandTotalSHM = totalEstimasi + totalBiayaLain;
 
     document.getElementById('rSisaPembayaran').textContent = rupiah(sisaPembayaran);
     document.getElementById('rPenambahanPembayaran').textContent = rupiah(biayaIuran);
@@ -590,12 +599,13 @@ function hitung(){
     document.getElementById('rPph').textContent = rupiah(pph);
     document.getElementById('rBphtb').textContent = rupiah(bphtb);
     document.getElementById('rTotalEstimasi').textContent = rupiah(totalEstimasi);
+    document.getElementById('rTotalBiayaLain').textContent = rupiah(totalBiayaLain);
+    document.getElementById('rGrandTotalSHM').textContent = rupiah(grandTotalSHM);
 
     document.getElementById('rNjop').textContent = rupiah(totalNjop);
     document.getElementById('rHargaBeli').textContent = '± ' + rupiah(hargaJualHitung);
 }
 
-// Reset Mengembalikan ke Mode Awal & Default Form
 function resetForm(){
     document.getElementById('jumlahBidang').value = 1;
     document.getElementById('jumlahPecah').value = 1;
@@ -607,7 +617,7 @@ function resetForm(){
     document.getElementById('biayaPnbp').value = 'Rp 500.000';
 
     if (isEditable) {
-        toggleEditMode(); // Kunci kembali form jika sedang dalam mode edit
+        toggleEditMode();
     }
 
     loadDataWarga();
