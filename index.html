@@ -47,6 +47,14 @@ input, select {
     box-sizing: border-box;
     font-size: 15px;
 }
+
+/* Style saat Readonly */
+input[readonly], select[disabled] {
+    background-color: #e9ecef;
+    cursor: not-allowed;
+    color: #495057;
+}
+
 button {
     padding: 10px 18px;
     border: none;
@@ -58,6 +66,8 @@ button {
 }
 .print { background: #2563eb; }
 .reset { background: #6b7280; }
+.btn-toggle-edit { background: #f59e0b; }
+.btn-toggle-edit.active { background: #10b981; }
 
 /* Tampilan Rincian Seperti di Gambar */
 .preview-card {
@@ -106,6 +116,60 @@ button {
     margin: 5px 0 0 20px;
     padding: 0;
 }
+
+/* Div Notif Pembayaran Feb 2027 & SISA */
+.notif-box {
+    background-color: #fef9e7;
+    border: 1px dashed #f1c40f;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+.notif-title {
+    font-size: 14px;
+    font-weight: bold;
+    color: #b7950b;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+.notif-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+    font-size: 14px;
+}
+.highlight-pay {
+    color: #27ae60;
+    font-weight: bold;
+}
+.highlight-sisa {
+    color: #c0392b;
+    font-weight: bold;
+}
+.land-info {
+    background: #f0f3f4;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #424242;
+    margin-top: 10px;
+}
+
+.catatan-khusus {
+    background-color: #e8f4f8;
+    border-left: 4px solid #0284c7;
+    padding: 12px 15px;
+    margin-top: 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #0369a1;
+    line-height: 1.5;
+}
+.catatan-khusus ul {
+    margin: 5px 0 0 15px;
+    padding: 0;
+}
+
 .catatan {
     font-size: 13px;
     color: #4b5563;
@@ -127,41 +191,42 @@ button {
         <div class="grid">
             <div>
                 <label>Nama Pemilik Rumah</label>
-                <select id="namaPemilik" onchange="updatePemilik()">
-                    <option value="Pak Dio - Blok A1">Pak Dio - Blok A1</option>
-                    <option value="Pak Tomy - Blok A2">Pak Tomy - Blok A2</option>
-                    <option value="Ibu Sely - Blok A3">Ibu Sely - Blok A3</option>
-                    <option value="Pak Gara - Blok A4">Pak Gara - Blok A4</option>
-                    <option value="Pak Mukmin - Blok A5">Pak Mukmin - Blok A5</option>
-                    <option value="Pak Jana - Blok A6">Pak Jana - Blok A6</option>
-                    <option value="Pak Zaki - Blok B2">Pak Zaki - Blok B2</option>
-                    <option value="Pak Dede - Blok B3">Pak Dede - Blok B3</option>
-                    <option value="Pak Aji - Blok B4">Pak Aji - Blok B4</option>
-                    <option value="Pak Ticko - Blok B5">Pak Ticko - Blok B5</option>
-                    <option value="Pak Alan - Blok B6">Pak Alan - Blok B6</option>
-                    <option value="Pak Farhan - Blok C4">Pak Farhan - Blok C4</option>
-                    <option value="Pak Agus - Blok D1">Pak Agus - Blok D1</option>
-                    <option value="Pak Imam - Blok D2-3">Pak Imam - Blok D2-3</option>
-                    <option value="Bu Jana - Blok D4-5">Bu Jana - Blok D4-5</option>
-                    <option value="Pak Ode - Blok D6">Pak Ode - Blok D6</option>
-                    <option value="Bu Asti - Blok E3">Bu Asti - Blok E3</option>
-                    <option value="Pak Sofyan - Blok E5">Pak Sofyan - Blok E5</option>
-                    <option value="Pak Baihakki - Blok E1-2">Pak Baihakki - Blok E1-2</option>
-                    <option value="Pak Budi - Blok D13">Pak Budi - Blok D13</option>
-                    <option value="Pak Fathur - Blok D14">Pak Fathur - Blok D14</option>
-                    <option value="Bu Mei - Blok D10">Bu Mei - Blok D10</option>
-                    <option value="Pak Satino - Blok D11">Pak Satino - Blok D11</option>
+                <select id="namaPemilik" onchange="loadDataWarga()">
+                    <option value="0">Pak Dio - Blok A1</option>
+                    <option value="1">Ibu Sely - Blok A3</option>
+                    <option value="2">Pak Gara - Blok A4</option>
+                    <option value="3">Pak Mukmin - Blok A5</option>
+                    <option value="4">Pak Jana - Blok A6</option>
+                    <option value="5">Pak Zaki - Blok B2</option>
+                    <option value="6">Pak Alan - Blok B6</option>
+                    <option value="7">Pak Imam - Blok D2-3</option>
+                    <option value="8">Bu Jana - Blok D4-5</option>
+                    <option value="9">Pak Ode - Blok D6</option>
+                    <option value="10">Pak Baihakki - Blok E1-2</option>
+                    <option value="11">Pak Fathur - Blok D14</option>
+                    <option value="12">Pak Tomy - Blok A2</option>
+                    <option value="13">Pak Dede - Blok B3</option>
+                    <option value="14">Pak Aji - Blok B4</option>
+                    <option value="15">Pak Ticko - Blok B5</option>
+                    <option value="16">Pak Farhan - Blok C4</option>
+                    <option value="17">Pak Agus - Blok D1</option>
+                    <option value="18">Bu Asti - Blok E3</option>
+                    <option value="19">Pak Budi - Blok D13</option>
+                    <option value="20">Bu Mei - Blok D10</option>
+                    <option value="21">Pak Satino - Blok D11</option>
+                    <option value="22">Pak Sofyan - Blok E5 (SHM Haryanto)</option>
+                    <option value="23">Pak Sofyan - Blok E5 (SHM Rikyh)</option>
                 </select>
             </div>
 
             <div>
                 <label>Jumlah Bidang</label>
-                <input type="number" id="jumlahBidang" value="1">
+                <input type="number" id="jumlahBidang" value="1" readonly>
             </div>
 
             <div>
-                <label>Jumlah Pecah Surat </label>
-                <select id="jumlahPecah">
+                <label>Jumlah Pecah Surat</label>
+                <select id="jumlahPecah" disabled>
                     <option value="1">1 Kali</option>
                     <option value="2">2 Kali</option>
                     <option value="3">3 Kali</option>
@@ -169,65 +234,68 @@ button {
             </div>
 
             <div>
-                <label>Kekurangan Biaya</label>
-                <select id="kekurangan">
-                    <option value="20000000">Ada (Rp 20.000.000)</option>
-                    <option value="0">Tidak Ada (Rp 0)</option>
-                </select>
+                <label>Tarif Pecah Sertifikat / Kali</label>
+                <input type="text" id="tarifPecahPerX" value="Rp 6.000.000" inputmode="numeric" readonly>
+            </div>
+
+            <div>
+                <label>Kurang Bayar</label>
+                <input type="text" id="kekurangan" value="Rp 20.000.000" readonly>
             </div>
 
             <div>
                 <label>Luas Tanah (m²)</label>
-                <input type="number" id="luasTanah" value="0">
+                <input type="number" id="luasTanah" value="0" readonly>
             </div>
 
             <div>
                 <label>Luas Bangunan (m²)</label>
-                <input type="number" id="luasBangunan" value="0">
+                <input type="number" id="luasBangunan" value="0" readonly>
             </div>
 
             <div>
                 <label>NJOP Tanah per m²</label>
-                <input type="text" id="njopTanahPerM2Input" value="Rp 3.100.000" inputmode="numeric">
+                <input type="text" id="njopTanahPerM2Input" value="Rp 3.100.000" inputmode="numeric" readonly>
             </div>
 
             <div>
                 <label>NJOP Bangunan per m²</label>
-                <input type="text" id="njopBangunanPerM2Input" value="Rp 1.516.000" inputmode="numeric">
+                <input type="text" id="njopBangunanPerM2Input" value="Rp 1.516.000" inputmode="numeric" readonly>
             </div>
 
             <div>
                 <label>NJOP Total (Dapat Diubah)</label>
-                <input type="text" id="njopTotalInput" value="Rp 0" inputmode="numeric">
+                <input type="text" id="njopTotalInput" value="Rp 0" inputmode="numeric" readonly>
             </div>
 
             <div>
                 <label>Harga Jual Rumah / Harga Beli</label>
-                <input type="text" id="hargaJual" value="Rp 0" inputmode="numeric">
+                <input type="text" id="hargaJual" value="Rp 0" inputmode="numeric" readonly>
             </div>
 
             <div>
                 <label>Biaya Iuran Surat</label>
-                <input type="text" id="biayaIuran" value="Rp 0" inputmode="numeric">
+                <input type="text" id="biayaIuran" value="Rp 0" inputmode="numeric" readonly>
             </div>
 
             <div>
                 <label>Biaya Notaris</label>
-                <input type="text" id="biayaNotaris" value="Rp 4.000.000" inputmode="numeric">
+                <input type="text" id="biayaNotaris" value="Rp 4.000.000" inputmode="numeric" readonly>
             </div>
 
             <div>
                 <label>Biaya Pecah PBB</label>
-                <input type="text" id="biayaPecahPbb" value="Rp 500.000" inputmode="numeric">
+                <input type="text" id="biayaPecahPbb" value="Rp 500.000" inputmode="numeric" readonly>
             </div>
 
             <div>
                 <label>Biaya PNBP</label>
-                <input type="text" id="biayaPnbp" value="Rp 500.000" inputmode="numeric">
+                <input type="text" id="biayaPnbp" value="Rp 500.000" inputmode="numeric" readonly>
             </div>
         </div>
 
         <br>
+        <button class="btn-toggle-edit" id="btnEdit" onclick="toggleEditMode()">Edit Data</button>
         <button class="print" onclick="window.print()">Print</button>
         <button class="reset" onclick="resetForm()">Reset</button>
     </div>
@@ -236,6 +304,18 @@ button {
     <div class="preview-card">
         <div class="title-rincian" id="titlePemilik">Rincian Kewajiban Pembayaran<br>Pak Dio - Blok A1 (0/0)</div>
         
+        <!-- DIV NOTIFIKASI PEMBAYARAN FEB 2027, SISA, & KETERANGAN TANAH -->
+        <div class="notif-box">
+            <div class="notif-title">📌 Status Pembayaran Akhir PEBRUARI 2027</div>
+            <div class="notif-grid">
+                <div>Pembayaran Akhir Feb 2027: <br><span class="highlight-pay" id="nFeb2027">Rp0</span></div>
+                <div>SISA Pembayaran: <br><span class="highlight-sisa" id="nSisa">Rp0</span></div>
+            </div>
+            <div class="land-info">
+                📍 <b>Keterangan Tanah:</b> <span id="nKetTanah">-</span>
+            </div>
+        </div>
+
         <table class="table-rincian">
             <thead>
                 <tr>
@@ -245,11 +325,11 @@ button {
             </thead>
             <tbody>
                 <tr>
-                    <td>Sisa pembayaran</td>
+                    <td>Kurang Bayar</td>
                     <td id="rSisaPembayaran">Rp0</td>
                 </tr>
                 <tr>
-                    <td>Penambahan pembayaran</td>
+                    <td>Penambahan pembayaran (Iuran Surat)</td>
                     <td id="rPenambahanPembayaran">Rp0</td>
                 </tr>
                 <tr>
@@ -277,7 +357,7 @@ button {
                     <td id="rBphtb">Rp0</td>
                 </tr>
                 <tr class="total-row">
-                    <td>TOTAL ESTIMASI</td>
+                    <td>TOTAL ESTIMASI (Total Bayar Tiap Warga)</td>
                     <td id="rTotalEstimasi">Rp0</td>
                 </tr>
             </tbody>
@@ -289,6 +369,7 @@ button {
                 <li>NJOP: <span id="rNjop">Rp0</span></li>
                 <li>Harga beli: <span id="rHargaBeli">± Rp0</span></li>
             </ul>
+            <div id="infoKhususContainer"></div>
         </div>
 
         <div class="catatan">
@@ -299,11 +380,84 @@ button {
 </div>
 
 <script>
+// Master Data Warga
+const databaseWarga = [
+    { nama: "Pak Dio - Blok A1", tanah: 65, bangunan: 40, kb: 20000000, iuran: 16634025, feb2027: "Rp22.855.189", sisa: "Rp13.778.836", ket: "SHM Ahmat Hamit" },
+    { nama: "Ibu Sely - Blok A3", tanah: 60, bangunan: 40, kb: 20000000, iuran: 15214091, feb2027: "Rp21.969.322", sisa: "Rp13.244.768", ket: "SHM Ahmat Hamit" },
+    { nama: "Pak Gara - Blok A4", tanah: 63, bangunan: 40, kb: 20000000, iuran: 16066051, feb2027: "Rp22.500.842", sisa: "Rp13.565.209", ket: "SHM Ahmat Hamit" },
+    { nama: "Pak Mukmin - Blok A5", tanah: 60, bangunan: 40, kb: 20000000, iuran: 15214091, feb2027: "Rp21.969.322", sisa: "Rp13.244.768", ket: "SHM Ahmat Hamit" },
+    { nama: "Pak Jana - Blok A6", tanah: 60, bangunan: 40, kb: 20000000, iuran: 15214091, feb2027: "Rp21.969.322", sisa: "Rp13.244.768", ket: "SHM Ahmat Hamit" },
+    { nama: "Pak Zaki - Blok B2", tanah: 60, bangunan: 40, kb: 20000000, iuran: 18864327, feb2027: "Rp24.246.627", sisa: "Rp14.617.700", ket: "SHM Ramah Ramin" },
+    
+    // Pak Alan: Detail Persentase & Rincian Proporsi
+    { 
+        nama: "Pak Alan - Blok B6", 
+        tanah: 39, 
+        bangunan: 26, 
+        kb: 12000000, 
+        iuran: 10900604, 
+        feb2027: "Rp14.287.200", 
+        sisa: "Rp8.613.404", 
+        ket: "SHM Ramah Ramin", 
+        infoKhusus: `
+            <b>Khusus Pak Alan:</b> Kurang bayar disesuaikan Rp12.000.000 dikarenakan perbedaan status berkas/surat.<br><br>
+            <b>Persentase Pembagian Pak Alan:</b><br>
+            - SHM: 39/60 = 65%<br>
+            - Girik: 21/60 = 35%<br><br>
+            <b>Perkiraan luas bangunan di masing-masing bagian:</b><br>
+            - Bangunan di atas SHM: 65% × 40 = 26 m²<br>
+            - Bangunan di atas Girik: 35% × 40 = 14 m²<br><br>
+            <i>Jadi kira-kira: Bangunan pada SHM 26 m² (65%) & Bangunan pada Girik 14 m² (35%).</i>
+        ` 
+    },
+    
+    { nama: "Pak Imam - Blok D2-3", tanah: 101, bangunan: 72, kb: 20000000, iuran: 28682668, feb2027: "Rp30.372.081", sisa: "Rp18.310.586", ket: "SHM Rikyh" },
+    { nama: "Bu Jana - Blok D4-5", tanah: 101, bangunan: 72, kb: 20000000, iuran: 28682668, feb2027: "Rp30.372.081", sisa: "Rp18.310.586", ket: "SHM Rikyh" },
+    { nama: "Pak Ode - Blok D6", tanah: 60, bangunan: 40, kb: 20000000, iuran: 17039209, feb2027: "Rp23.107.975", sisa: "Rp13.931.234", ket: "SHM Rikyh" },
+    { nama: "Pak Baihakki - Blok E1-2", tanah: 80, bangunan: 50, kb: 20000000, iuran: 20893827, feb2027: "Rp25.512.789", sisa: "Rp15.381.038", ket: "SHM Haryanto" },
+    { nama: "Pak Fathur - Blok D14", tanah: 50, bangunan: 36, kb: 20000000, iuran: 16024458, feb2027: "Rp22.474.894", sisa: "Rp13.549.565", ket: "SHM Ramah Ramin" },
+    { nama: "Pak Tomy - Blok A2", tanah: 60, bangunan: 40, kb: 0, iuran: 15214091, feb2027: "Rp9.491.748", sisa: "Rp5.722.343", ket: "SHM Ahmat Hamit" },
+    { nama: "Pak Dede - Blok B3", tanah: 60, bangunan: 104, kb: 0, iuran: 18864327, feb2027: "Rp11.769.052", sisa: "Rp7.095.274", ket: "SHM Ramah Ramin" },
+    { nama: "Pak Aji - Blok B4", tanah: 47.5, bangunan: 40, kb: 0, iuran: 15314491, feb2027: "Rp9.554.386", sisa: "Rp5.760.106", ket: "SHM Ramah Ramin" },
+    { nama: "Pak Ticko - Blok B5", tanah: 40, bangunan: 40, kb: 0, iuran: 13184590, feb2027: "Rp8.225.586", sisa: "Rp4.959.005", ket: "SHM Ramah Ramin" },
+    
+    // Pak Farhan: Detail Persentase & Rincian Proporsi
+    { 
+        nama: "Pak Farhan - Blok C4", 
+        tanah: 10, 
+        bangunan: 6.67, 
+        kb: 0, 
+        iuran: 4664986, 
+        feb2027: "Rp2.910.386", 
+        sisa: "Rp1.754.600", 
+        ket: "SHM Ramah Ramin", 
+        infoKhusus: `
+            <b>Khusus Pak Farhan:</b> Luas tanah 10m² dan luas bangunan 6.67m² disesuaikan dengan kavling khusus.<br><br>
+            <b>Persentase Pembagian Pak Farhan:</b><br>
+            Jika diasumsikan total awal: Luas tanah = 60 m², Luas bangunan = 40 m²<br>
+            Pembagian tanah: SHM = 10 m², Girik = 50 m²<br><br>
+            <b>Maka proporsinya adalah:</b><br>
+            - SHM = 10/60 = 16,67%<br>
+            - Girik = 50/60 = 83,33%<br><br>
+            <b>Perkiraan luas bangunan di masing-masing status tanah:</b><br>
+            - Bangunan di SHM: 16,67% × 40 ≈ 6,67 m²<br>
+            - Bangunan di Girik: 83,33% × 40 ≈ 33,33 m²<br><br>
+            <i>Jadi kira-kira: SHM ± 6,7 m² bangunan (16,67%) & Girik ± 33,3 m² bangunan (83,33%).</i>
+        ` 
+    },
+    
+    { nama: "Pak Agus - Blok D1", tanah: 48, bangunan: 36, kb: 0, iuran: 13631367, feb2027: "Rp8.504.320", sisa: "Rp5.127.047", ket: "SHM Rikyh" },
+    { nama: "Bu Asti - Blok E3", tanah: 49, bangunan: 36, kb: 0, iuran: 13915354, feb2027: "Rp8.681.493", sisa: "Rp5.233.860", ket: "SHM Rikyh" },
+    { nama: "Pak Budi - Blok D13", tanah: 71, bangunan: 40, kb: 0, iuran: 21988181, feb2027: "Rp13.717.959", sisa: "Rp8.270.223", ket: "SHM Ramah Ramin" },
+    { nama: "Bu Mei - Blok D10", tanah: 60, bangunan: 0, kb: 0, iuran: 18864327, feb2027: "Rp11.769.052", sisa: "Rp7.095.274", ket: "SHM Ramah Ramin" },
+    { nama: "Pak Satino - Blok D11", tanah: 60, bangunan: 0, kb: 0, iuran: 18864327, feb2027: "Rp11.769.052", sisa: "Rp7.095.274", ket: "SHM Ramah Ramin" },
+    { nama: "Pak Sofyan - Blok E5", tanah: 30, bangunan: 20, kb: 0, iuran: 16694486, feb2027: "Rp10.415.335", sisa: "Rp6.279.151", ket: "yang masuk ke SHM Haryanto" },
+    { nama: "Pak Sofyan - Blok E5", tanah: 30, bangunan: 20, kb: 20000000, iuran: 15214090, feb2027: "Rp11.553.987", sisa: "Rp6.965.617", ket: "yang masuk ke SHM Rikyh" }
+];
+
+var isEditable = false;
 var isManualNjop = false;
 var isManualHargaJual = false;
-
-// Tarif dasar pecah sertifikat per kali
-var TARIF_PECAH_PER_X = 6000000;
 
 function rupiah(n){
     return 'Rp' + Math.round(n).toLocaleString('id-ID');
@@ -324,41 +478,84 @@ function formatCurrencyInput(inputElement){
     }
 }
 
-// Pembulatan ke kelipatan 50 Juta Terdekat (ke atas)
 function bulatkanKePembulatanSpesifik(val) {
     if (val <= 0) return 0;
     return Math.ceil(val / 50000000) * 50000000;
 }
 
-function updatePemilik() {
+function toggleEditMode() {
+    isEditable = !isEditable;
+    const btn = document.getElementById('btnEdit');
+    const inputs = document.querySelectorAll('.grid input, .grid select');
+
+    if (isEditable) {
+        btn.textContent = 'Kunci Data';
+        btn.classList.add('active');
+        inputs.forEach(el => {
+            el.removeAttribute('readonly');
+            el.removeAttribute('disabled');
+        });
+    } else {
+        btn.textContent = 'Edit Data';
+        btn.classList.remove('active');
+        inputs.forEach(el => {
+            if (el.id !== 'namaPemilik') {
+                el.setAttribute('readonly', true);
+                if (el.tagName === 'SELECT') el.setAttribute('disabled', true);
+            }
+        });
+    }
+}
+
+function loadDataWarga() {
+    const idx = document.getElementById('namaPemilik').value;
+    const data = databaseWarga[idx];
+
+    document.getElementById('luasTanah').value = data.tanah;
+    document.getElementById('luasBangunan').value = data.bangunan;
+    document.getElementById('kekurangan').value = 'Rp ' + Number(data.kb).toLocaleString('id-ID');
+    document.getElementById('biayaIuran').value = 'Rp ' + Number(data.iuran).toLocaleString('id-ID');
+    
+    document.getElementById('nFeb2027').textContent = data.feb2027;
+    document.getElementById('nSisa').textContent = data.sisa;
+    document.getElementById('nKetTanah').textContent = data.ket;
+
+    // Menampilkan Informasi Khusus Persentase Pak Alan & Pak Farhan
+    const container = document.getElementById('infoKhususContainer');
+    if (data.infoKhusus) {
+        container.innerHTML = `<div class="catatan-khusus">${data.infoKhusus}</div>`;
+    } else {
+        container.innerHTML = '';
+    }
+
+    isManualNjop = false;
+    isManualHargaJual = false;
     hitung();
 }
 
 function hitung(){
-    var nama = document.getElementById('namaPemilik').value;
+    var selectElem = document.getElementById('namaPemilik');
+    var nama = selectElem.options[selectElem.selectedIndex].text;
     var luasTanah = parseFloat(document.getElementById('luasTanah').value) || 0;
     var luasBangunan = parseFloat(document.getElementById('luasBangunan').value) || 0;
     
-    // Update Judul dengan Luas Bangunan / Luas Tanah
     document.getElementById('titlePemilik').innerHTML = 'Rincian Kewajiban Pembayaran<br>' + nama + ' (' + luasTanah + '/' + luasBangunan + ')';
 
     var pecahSurat = parseFloat(document.getElementById('jumlahPecah').value) || 1;
-    var sisaPembayaran = parseFloat(document.getElementById('kekurangan').value) || 0;
-    var biayaIuran = getNumber(document.getElementById('biayaIuran').value);
+    var tarifPecahPerX = getNumber(document.getElementById('tarifPecahPerX').value);
+    var totalBiayaPecah = tarifPecahPerX * pecahSurat;
     
-    // Update Label dan perhitungan otomatis biaya pecah sertifikat
-    document.getElementById('tdLabelPecah').textContent = 'Biaya pecah sertifikat (' + pecahSurat + 'x)';
-    var totalBiayaPecah = TARIF_PECAH_PER_X * pecahSurat;
+    document.getElementById('tdLabelPecah').textContent = 'Biaya pecah sertifikat (' + pecahSurat + 'x @ ' + rupiah(tarifPecahPerX) + ')';
 
+    var sisaPembayaran = getNumber(document.getElementById('kekurangan').value);
+    var biayaIuran = getNumber(document.getElementById('biayaIuran').value);
     var biayaNotaris = getNumber(document.getElementById('biayaNotaris').value);
     var biayaPbb = getNumber(document.getElementById('biayaPecahPbb').value);
     var biayaPnbp = getNumber(document.getElementById('biayaPnbp').value);
 
-    // Ambil Nilai NJOP per m2 dari Form Input
     var njopTanahPerM2 = getNumber(document.getElementById('njopTanahPerM2Input').value);
     var njopBangunanPerM2 = getNumber(document.getElementById('njopBangunanPerM2Input').value);
 
-    // Hitung NJOP Total
     var totalNjop = 0;
     if (!isManualNjop) {
         totalNjop = (luasTanah * njopTanahPerM2) + (luasBangunan * njopBangunanPerM2);
@@ -367,7 +564,6 @@ function hitung(){
         totalNjop = getNumber(document.getElementById('njopTotalInput').value);
     }
 
-    // Pembulatan NJOP ke kelipatan 50jt atas
     var hargaJualHitung = bulatkanKePembulatanSpesifik(totalNjop);
 
     if (!isManualHargaJual) {
@@ -376,17 +572,15 @@ function hitung(){
         hargaJualHitung = getNumber(document.getElementById('hargaJual').value);
     }
 
-    // Perhitungan Pajak
-    var pph = hargaJualHitung * 0.025; // 2.5%
+    var pph = hargaJualHitung * 0.025;
     var npoptkpDepok = 60000000;
     var npop = Math.max(hargaJualHitung, totalNjop);
     var dppBphtb = Math.max(0, npop - npoptkpDepok);
-    var bphtb = dppBphtb * 0.05; // 5%
+    var bphtb = dppBphtb * 0.05;
 
-    // Grand Total Estimasi
-    var totalEstimasi = sisaPembayaran + biayaIuran + totalBiayaPecah + biayaNotaris + biayaPbb + biayaPnbp + pph + bphtb;
+    // Total Bayar Tiap Warga = Kurang Bayar + iuran surat
+    var totalEstimasi = sisaPembayaran + biayaIuran;
 
-    // Output ke tabel rincian
     document.getElementById('rSisaPembayaran').textContent = rupiah(sisaPembayaran);
     document.getElementById('rPenambahanPembayaran').textContent = rupiah(biayaIuran);
     document.getElementById('rBiayaPecah').textContent = rupiah(totalBiayaPecah);
@@ -397,34 +591,34 @@ function hitung(){
     document.getElementById('rBphtb').textContent = rupiah(bphtb);
     document.getElementById('rTotalEstimasi').textContent = rupiah(totalEstimasi);
 
-    // Informasi Pendukung
     document.getElementById('rNjop').textContent = rupiah(totalNjop);
     document.getElementById('rHargaBeli').textContent = '± ' + rupiah(hargaJualHitung);
 }
 
+// Reset Mengembalikan ke Mode Awal & Default Form
 function resetForm(){
-    isManualNjop = false;
-    isManualHargaJual = false;
-
-    document.getElementById('namaPemilik').selectedIndex = 0;
     document.getElementById('jumlahBidang').value = 1;
     document.getElementById('jumlahPecah').value = 1;
-    document.getElementById('kekurangan').value = 20000000;
-    document.getElementById('luasTanah').value = 0;
+    document.getElementById('tarifPecahPerX').value = 'Rp 6.000.000';
     document.getElementById('njopTanahPerM2Input').value = 'Rp 3.100.000';
-    document.getElementById('luasBangunan').value = 0;
     document.getElementById('njopBangunanPerM2Input').value = 'Rp 1.516.000';
-    document.getElementById('njopTotalInput').value = 'Rp 0';
-    document.getElementById('hargaJual').value = 'Rp 0';
-    document.getElementById('biayaIuran').value = 'Rp 0';
     document.getElementById('biayaNotaris').value = 'Rp 4.000.000';
     document.getElementById('biayaPecahPbb').value = 'Rp 500.000';
     document.getElementById('biayaPnbp').value = 'Rp 500.000';
 
-    hitung();
+    if (isEditable) {
+        toggleEditMode(); // Kunci kembali form jika sedang dalam mode edit
+    }
+
+    loadDataWarga();
 }
 
-// Handler input NJOP per m2
+// Event Listeners Input
+document.getElementById('tarifPecahPerX').addEventListener('input', function(){
+    formatCurrencyInput(this);
+    hitung();
+});
+
 document.getElementById('njopTanahPerM2Input').addEventListener('input', function(){
     isManualNjop = false;
     isManualHargaJual = false;
@@ -439,7 +633,6 @@ document.getElementById('njopBangunanPerM2Input').addEventListener('input', func
     hitung();
 });
 
-// Handler input manual NJOP Total & Harga Jual
 document.getElementById('njopTotalInput').addEventListener('input', function(){
     isManualNjop = true;
     formatCurrencyInput(this);
@@ -452,8 +645,7 @@ document.getElementById('hargaJual').addEventListener('input', function(){
     hitung();
 });
 
-// Event Listeners currency inputs
-var currencyInputs = ['biayaIuran', 'biayaNotaris', 'biayaPecahPbb', 'biayaPnbp'];
+var currencyInputs = ['biayaIuran', 'biayaNotaris', 'biayaPecahPbb', 'biayaPnbp', 'kekurangan'];
 currencyInputs.forEach(function(id) {
     document.getElementById(id).addEventListener('input', function(){
         formatCurrencyInput(this);
@@ -463,7 +655,6 @@ currencyInputs.forEach(function(id) {
 
 document.getElementById('jumlahBidang').addEventListener('input', hitung);
 document.getElementById('jumlahPecah').addEventListener('change', hitung);
-document.getElementById('kekurangan').addEventListener('change', hitung);
 document.getElementById('luasTanah').addEventListener('input', function(){
     isManualNjop = false;
     isManualHargaJual = false;
@@ -476,7 +667,7 @@ document.getElementById('luasBangunan').addEventListener('input', function(){
 });
 
 window.onload = function() {
-    hitung();
+    loadDataWarga();
 };
 </script>
 
